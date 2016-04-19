@@ -14,6 +14,7 @@
 		96F320651CA5B9EF0051B98E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96F320631CA5B9EF0051B98E /* LaunchScreen.storyboard */; };
 		96F320701CA5B9EF0051B98E /* MapWeatherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F3206F1CA5B9EF0051B98E /* MapWeatherTests.swift */; };
 		96F3207B1CA5B9EF0051B98E /* MapWeatherUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F3207A1CA5B9EF0051B98E /* MapWeatherUITests.swift */; };
+		96F320891CA64A840051B98E /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F320881CA64A840051B98E /* WebViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		96F320761CA5B9EF0051B98E /* MapWeatherUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapWeatherUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		96F3207A1CA5B9EF0051B98E /* MapWeatherUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapWeatherUITests.swift; sourceTree = "<group>"; };
 		96F3207C1CA5B9EF0051B98E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		96F320881CA64A840051B98E /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				96F320611CA5B9EF0051B98E /* Assets.xcassets */,
 				96F320631CA5B9EF0051B98E /* LaunchScreen.storyboard */,
 				96F320661CA5B9EF0051B98E /* Info.plist */,
+				96F320881CA64A840051B98E /* WebViewController.swift */,
 			);
 			path = MapWeather;
 			sourceTree = "<group>";
@@ -193,6 +196,7 @@
 				TargetAttributes = {
 					96F320561CA5B9EE0051B98E = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 98NVHLW32X;
 					};
 					96F3206A1CA5B9EF0051B98E = {
 						CreatedOnToolsVersion = 7.3;
@@ -257,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96F3205D1CA5B9EE0051B98E /* ViewController.swift in Sources */,
+				96F320891CA64A840051B98E /* WebViewController.swift in Sources */,
 				96F3205B1CA5B9EE0051B98E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -399,10 +404,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MapWeather/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = home.raggio.MapWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -410,10 +418,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MapWeather/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = home.raggio.MapWeather;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -482,6 +493,7 @@
 				96F320811CA5B9EF0051B98E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		96F320821CA5B9EF0051B98E /* Build configuration list for PBXNativeTarget "MapWeatherTests" */ = {
 			isa = XCConfigurationList;
@@ -490,6 +502,7 @@
 				96F320841CA5B9EF0051B98E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		96F320851CA5B9EF0051B98E /* Build configuration list for PBXNativeTarget "MapWeatherUITests" */ = {
 			isa = XCConfigurationList;
@@ -498,6 +511,7 @@
 				96F320871CA5B9EF0051B98E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

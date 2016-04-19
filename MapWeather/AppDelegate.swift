@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  MapWeather
-//
-//  Created by Raggios on 3/25/16.
-//  Copyright © 2016 Raggios. All rights reserved.
-//
 
 import UIKit
 
