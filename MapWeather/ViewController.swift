@@ -125,6 +125,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         
     }
     
+ // now using SFSafariViewController instead of old style web view
     
 //    // set the url for the web view
 //    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
