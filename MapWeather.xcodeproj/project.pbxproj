@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		968C65741CF0FDCC00BB4DB7 /* CityAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968C65731CF0FDCC00BB4DB7 /* CityAnnotation.swift */; };
 		96F3205B1CA5B9EE0051B98E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F3205A1CA5B9EE0051B98E /* AppDelegate.swift */; };
 		96F3205D1CA5B9EE0051B98E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F3205C1CA5B9EE0051B98E /* ViewController.swift */; };
 		96F320601CA5B9EE0051B98E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96F3205E1CA5B9EE0051B98E /* Main.storyboard */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		968C65731CF0FDCC00BB4DB7 /* CityAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityAnnotation.swift; sourceTree = "<group>"; };
 		96F320571CA5B9EE0051B98E /* MapWeather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapWeather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96F3205A1CA5B9EE0051B98E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		96F3205C1CA5B9EE0051B98E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 			children = (
 				96F3205A1CA5B9EE0051B98E /* AppDelegate.swift */,
 				96F3205C1CA5B9EE0051B98E /* ViewController.swift */,
+				968C65731CF0FDCC00BB4DB7 /* CityAnnotation.swift */,
 				96F3205E1CA5B9EE0051B98E /* Main.storyboard */,
 				96F320611CA5B9EF0051B98E /* Assets.xcassets */,
 				96F320631CA5B9EF0051B98E /* LaunchScreen.storyboard */,
@@ -263,6 +266,7 @@
 				96F3205D1CA5B9EE0051B98E /* ViewController.swift in Sources */,
 				96F320891CA64A840051B98E /* WebViewController.swift in Sources */,
 				96F3205B1CA5B9EE0051B98E /* AppDelegate.swift in Sources */,
+				968C65741CF0FDCC00BB4DB7 /* CityAnnotation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

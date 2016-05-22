@@ -16,9 +16,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
             self.mapView.setRegion(region, animated: true)
             
             // remove old annotations
-            if mapView?.annotations != nil{
-                mapView.removeAnnotations(mapView.annotations as [MKAnnotation])
-            }
+            mapView.removeAnnotations(mapView.annotations)
             
             // drop a pin in the new location
             mapView.addAnnotation(CityAnnotation(coordinate: center))
@@ -51,11 +49,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         // avoid effect of GPS drift
         if(lastLocation != nil){
             if(userLocation.location!.distanceFromLocation(lastLocation!) > distanceThreshhold ){
-                // print("didUpdateLocations called and different: \(locations)")
                 lastLocation = userLocation.location
             }
         }else{
-            // print("didUpdateLocations called and was previously empty: \(locations)")
             lastLocation = userLocation.location
         }
 
@@ -65,50 +61,50 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     // need to override these if you are doing something more than showing a title and subtitle
     // i.e. adding an icon
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
-        // try to get a reusable annotation, otherwise create one
-        var view = mapView.dequeueReusableAnnotationViewWithIdentifier("myID")
         
-        if annotation is CityAnnotation{
-            if view == nil {
-                view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "myID")
-            } else {
-                view!.annotation = annotation
-            }
+        if let ca = annotation as? CityAnnotation{
             
-            view?.canShowCallout=true
+            // try to get a reusable annotation view, otherwise create one
+            let annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier("myID")  ??
+                                 MKPinAnnotationView(annotation: annotation, reuseIdentifier: "myID")
             
-            // the code above you essentially get for free, what follows is "custom"
-            // add an empty image for now.  It will be filled in when the annotation is selected
-            view!.leftCalloutAccessoryView = UIImageView(frame: CGRect(x: 0, y: 0, width: 45, height: 45))
-            view!.rightCalloutAccessoryView = UIButton(type: UIButtonType.DetailDisclosure) as UIButton
+            annotationView.annotation = ca
+            annotationView.canShowCallout=true
+            
+            // the code above you essentially get for free, but needs to be specified if 
+            // you wish to add accessories as below
+            
+            annotationView.leftCalloutAccessoryView = ca.forecastView
+            annotationView.rightCalloutAccessoryView = UIButton(type: UIButtonType.DetailDisclosure) as UIButton
+            
+            return annotationView
 
         }
-        else if annotation is MKUserLocation{
-            view = nil // use the default blue dot
+        else{
+            return nil // use the default blue dot
         }
-        
-        return view
         
     }
     
-    // called when the pin is tapped - load the image late since it shows the current weather
+    // called when the pin is tapped - load the image and other weather data late since it needs to get the current info
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        // set image for CityAnnotation
         if let ca = view.annotation as? CityAnnotation{
-            // needed to wait to do this since the callout should have the most recent info to display
-            // really should do this on a background thread, but not sure what we would show while waiting
-            ca.loadData()
+            // The view will use placeholder text and an activity indicator
+            // while the annotation loads the real data in the background
+            // when it is done it will update the view with the city and weather info
+            ca.loadDataForView(view)
+        }
+    }
+    
+    func mapView(mapView: MKMapView, didDeselectAnnotationView view: MKAnnotationView) {
+        if let ca = view.annotation as? CityAnnotation{
+            // have the ca discard any current weather info it has now
+            ca.resetData()
             
-            if let imageView = view.leftCalloutAccessoryView as? UIImageView {
-                if let url = ca.currentIconImageURL {
-                    if let imageData = NSData(contentsOfURL: url){
-                        if let image = UIImage(data: imageData){
-                            imageView.contentMode = UIViewContentMode.ScaleAspectFill;
-                            imageView.image = image
-                        }
-                    }
-                }
-            }
+            // since the views are resuable need to get the activty view from the reset ca,
+            // otherwise we might see the previous weather icon here while the new one loads
+            view.leftCalloutAccessoryView = ca.forecastView
+
         }
     }
     
@@ -122,97 +118,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
                 presentViewController(vc, animated: true, completion: nil)
             }
         }
-        
     }
-    
- // now using SFSafariViewController instead of old style web view
-    
-//    // set the url for the web view
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        if segue.identifier == "Show Forecast" {
-//            if let dvc = segue.destinationViewController as? WebViewController {
-//               dvc.urlString = ((sender as? MKAnnotationView)?.annotation as? CityAnnotation)?.forecastURLString
-//            }
-//        }
-//    }
-
-}
-
-class CityAnnotation: NSObject, MKAnnotation{
-    
-    let coordinate: CLLocationCoordinate2D
-    var forecastURLString: String?
-    var city: String?
-    var temperature: String?
-    var currentIconImageURL: NSURL?
-    
-    init(coordinate: CLLocationCoordinate2D) {
-        self.coordinate = coordinate
-        // Need a placeholder or the pin will suppress callouts!
-        city = "Data to be Loaded Later"
-    }
-    
-    var title: String?{
-        return city
-    }
-    
-    var subtitle: String? {
-        return temperature
-    }
-   
-    // could use error checking here in case json is malformed
-    func loadData(){
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        
-        if let jsonDict:NSDictionary = getJSON(coordinate){
-            let observation = jsonDict["current_observation"] as! NSDictionary
-            let location = observation["display_location"] as! NSDictionary
-            
-            city = (location["full"] as? String)!
-            
-            // force https since calls to http will fail!  This is due to ATS
-            let urlString = observation["icon_url"] as! String
-            currentIconImageURL = NSURL(string: urlString.stringByReplacingOccurrencesOfString("http:", withString: "https:"))!
-            
-            if let fedURLString = observation["forecast_url"] as? String{
-                forecastURLString = fedURLString.stringByReplacingOccurrencesOfString("http:", withString: "https:")
-            }
-            
-            temperature = observation["temperature_string"] as? String
-        }
-        
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-        
-    }
-    
-    private func getJSON(coordinate: CLLocationCoordinate2D) -> NSDictionary?{
-
-        var result:NSDictionary?
-        
-        let coordinateURLString: String = "https://api.wunderground.com/api/5932fa7b05de42a2/conditions/forecast/alert/q/\(coordinate.latitude),\(coordinate.longitude).json"
-        let url: NSURL? = NSURL( string: coordinateURLString)
-        
-        if let jsonData:NSData = NSData(contentsOfURL: url!){
-            do {
-                result = try NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
-            } catch let error as NSError {
-                print("Failed to load: \(error.localizedDescription)")
-            }
-        }
-        
-        return result
-    }
-    
-}
-
-// samples used http, but that gave a runtime warning.  Looks like https works
-// Get the city name from lat,long
-// https://api.wunderground.com/api/5932fa7b05de42a2/geolookup/q/40.75921100,-73.98463800.json
-
-// get the weather from city name
-// https://api.wunderground.com/api/5932fa7b05de42a2/conditions/q/NY/New%20York.json that is retrieved above from lat/long
-
-// forecast for a given lat/long -> this one UNDOCUMENTED call alone gets the city name and the weather
-// https://api.wunderground.com/api/5932fa7b05de42a2/conditions/forecast/alert/q/40.75921100,-73.98463800.json
-
+ }
 
